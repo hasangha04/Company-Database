@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
@@ -18,20 +19,40 @@ private:
     Node * insert(Node * t, int x, string position, string name)
     {
         //  Sets root as the first node
-        if (t == NULL)
+        if (t == nullptr)
         {
             t = newNode(x, position, name);
             return t;
-        } 
-        // Checks if value should go left
-        else if (x < t->val) 
-        {
-            t->left = insert(t->left, x, position, name);
         }
-        // Checks if value should go right
+        else if (x < t->val)
+        {
+            if (t->left != nullptr)
+            {
+                // Checks if value should go left
+                insert(t->left, x, position, name);
+            }
+            else
+            {
+                t->left =  newNode(x, position, name);
+                return t;
+            }
+        }
+        else if (x > t->val)
+        {
+            if (t->right != nullptr)
+            {
+                // Checks if value should go right
+                insert(t->right, x, position, name);
+            }
+            else
+            {
+                t->right =  newNode(x, position, name);
+                return t;
+            }
+        }
         else 
         {
-            t->right = insert(t->right, x, position, name);
+            cout << "The value " << x << " has already been added\n";
         }
         return t;
     }
@@ -112,8 +133,14 @@ public:
 
 int main()
 {
+    string input;
+    char command;
+    int val;
+    string position;
+    string name;
     BST theTree;
 
+    // Initialize the database
     theTree.insertNode(30, "CEO", "Jeff");
     theTree.insertNode(20, "COO", "Gary");
     theTree.insertNode(40, "CIO", "Amberly");
@@ -126,7 +153,65 @@ int main()
     theTree.insertNode(32, "Salesman", "Marion");
     theTree.insertNode(53, "Accountant", "Drew");
 
-    theTree.preorderDisplay();
+    bool quit = true;
+	while (quit != false)
+    {
+        cout << "[A]dd a new contact" << endl;
+        cout << "[R]eplace a contact's name" << endl;
+        cout << "[P]rint the database" << endl;
+        cout << "[Q]uit the program" << endl;
+        cout << "What would you like to do to the database: ";
+        cin >> input;
+        transform(input.begin(), input.end(), input.begin(), ::toupper);
+        command = input.at(0);
+
+        switch (command)
+        {
+            case 'A':
+                cout << "What value would you like to add: ";
+                cin >> val;
+                cout << "What is their position: ";
+                cin >> position;
+                cout << "What is their name: ";
+                cin >> name;
+                theTree.insertNode(val,position,name);
+                cout << endl;
+                break;
+            case 'R':
+            case 'P':
+                cout << "[1] Inorder Display" << endl;
+                cout << "[2] Preorder Display" << endl;
+                cout << "[3] Postoder Display" << endl;
+                cout << "How would you like to display database: ";
+                cin >> val;
+
+                switch (val)
+                {
+                    case 1:
+                        theTree.inorderDisplay();
+                        cout << endl;
+                        break;
+                    case 2:
+                        theTree.preorderDisplay();
+                        cout << endl;
+                        break;
+                    case 3:
+                        theTree.postorderDisplay();
+                        cout << endl;
+                        break;
+                }
+                break;
+            case 'Q':
+                cout << "End of Program\n";
+				cout << "Thank you for coming!\n";
+				quit = false;
+				cout << endl;
+				break;
+            default:
+                cout << "Not a valid choice try again!" << endl;
+                break;
+        }
+    }
 
     return 0;
 }
