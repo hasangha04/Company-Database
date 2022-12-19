@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+#include <string>
 
 using namespace std;
 
@@ -55,6 +56,32 @@ private:
             cout << "The value " << x << " has already been added\n";
         }
         return t;
+    }
+
+    void replaceName(Node* node, int x, string newName)
+    {
+        if (node == nullptr)
+        {
+            cout << "No person found with this value" << endl;
+            return;
+        }
+        if (node->val == x)
+        {
+            node->name= newName;
+            cout << "Name successfully changed" << endl;
+        }
+        else if (x < node->val)
+        {
+            //Searches the left tree to
+            //see if the given node is there
+            replaceName(node->left, x, newName);
+        }
+        else
+        {
+            //Searches the right tree to
+            //see if the given node is there
+            replaceName(node->right, x, newName);
+        }
     }
 
     void inorder(Node * t)
@@ -114,6 +141,11 @@ public:
     {
         root = insert(root, x, position, name);
     }
+    
+    void replace(int x, string newName)
+    {
+        return replaceName(root, x, newName);
+    }
 
     void inorderDisplay()
     {
@@ -171,13 +203,20 @@ int main()
                 cout << "What value would you like to add: ";
                 cin >> val;
                 cout << "What is their position: ";
-                cin >> position;
+                getline (cin >> ws, position);
                 cout << "What is their name: ";
                 cin >> name;
                 theTree.insertNode(val,position,name);
                 cout << endl;
                 break;
             case 'R':
+                cout << "What is the value of the person whose name needs to be changed: ";
+                cin >> val;
+                cout << "What is the new name: ";
+                cin >> input;
+                theTree.replace(val,input);
+                cout << endl;
+                break;
             case 'P':
                 cout << "[1] Inorder Display" << endl;
                 cout << "[2] Preorder Display" << endl;
