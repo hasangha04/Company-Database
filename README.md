@@ -1,4 +1,4 @@
-# Company-Database
+# Company Database
 This is a company database built using a binary search tree to emulate the structure of a company. 
 The tree itself is built with basic C++ methods of pointers and traversals. 
 However, an addition was made to the node struct to be able to add additional information for the given person in the company. 
